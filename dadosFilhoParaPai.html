@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviando dados de filho para o pai</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+    crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="app">
+        <div class="container mt-5">
+            <div class="mx-auto" style="width: 400px">
+                <!-- escutando o evento search e depois rodo o metodo -->
+                <search-user v-model:pai="paiUSer" @search="paiSearch"></search-user>
+
+                <search-user v-model:first-name="firstName"></search-user>
+                <search-user v-model:last-name="lastName"></search-user>
+            </div>
+        </div>
+    </div>
+
+    <template id="searchUser">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <!-- tudo que eu digitar no input, o v-model(user) vai capturar -->
+                    <input v-model="user" type="text" class="form-control" placeholder="Nome do usuario">
+                    
+                    <input :value="firstName" @input="onFirstName" type="text" class="form-control" placeholder="Primeiro nome">
+                    <input :value="lastName" @input="onLastName"type="text" class="form-control" placeholder="Sobrenome">
+                    <button class="btn btn-outline-secondary" type="button" @click="search">
+                        Pesquisar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {    
+                    PaiUser: '',
+                    firstName: '',
+                    lastName: ''
+                }
+            },
+            methods: {
+               /*  (user) é o parametro que está sendo passado. */
+                paiSearch(user) {
+                    console.log('pai', user)
+
+                }
+            }
+        })
+
+        ap.component('search-user', {
+            props: ['modelValue', ],
+            props: ['pai'],
+            props: ['firstName', 'lastName'],
+            template: '#searchUser',
+            data() {
+                return {
+                    user: '',
+                }
+            },
+            /* quando o component for montado, faz alguma interação */
+            created() {
+                /* a minha variavel local vai ser igual a modelValue
+                e modelValue está sendo passado pela props, e lá esta passando a propria variavel */
+                this.user = this.modelValue
+                 this.user = this.pai
+            },
+            methods: {
+                search() {
+/* primeiro parametro é o nome do evento que vamos passar, 
+e o segundo é o dado de fato que vamos passar , pode ser uma string, array,object e etc
+e o segundo é parametro que vai ser passado pro pai,
+e esse parametro é passado direto no methods do pai */
+                    this.$emit('search', {user: this.user}),
+
+                    this.$emit('update:modelValue', { user: this.user }),
+                     this.$emit('update:pai', { user: this.user }),
+               
+                     onFirstNamee($event) {
+                        this.$emit('update:first-name', $event.target.value)
+                    },
+                    onLastName($event) {
+                        this.$emit('update:last-name', $event.target.value)
+                     },
+                    
+                }
+        } )
+
+
+        app.mount('#app')
+    </script>
+</body>
+</html>l
