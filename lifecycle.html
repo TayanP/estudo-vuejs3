@@ -1,0 +1,80 @@
+<!-- ciclo de vida = criação, montagem, atualização e destruição -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Ciclo de vida - lifecycle hooks</title>
+</head>
+<body>
+ <div id="app">
+  <h1>{{title }}</h1>
+
+  <user v-if="mostreComponent" />
+ </div>
+
+ <template>
+  <div id="user">
+   Meu component
+  </div>
+ </template>
+
+ <script src="https://unpkg.com/vue@next"></script>
+ 
+ <script>
+  const app = Vue.createApp({
+   data() {
+    return {
+     title: 'lifecycle hooks',
+     mostreComponent: true
+    }
+   },
+   /* fase de criação */
+   /* antes do component ser criado, */
+   beforeCreate() {
+    console.log('beforeCreate')
+   },
+   /* depois que o component é criado,
+    */
+   created() {
+    console.log(this.title, 'created')
+   },
+   /* fase de montagem  */
+   beforeMount() {
+    console.log(this.title, 'beforeMount')
+   },
+   mounted() {
+    console.log(this.title, 'mounted')
+   },
+
+   /* fase de atualização */
+   beforeUpdate() {
+    console.log(this.title, 'beforeUpdate')
+   },
+   updated() {
+    console.log(this.title, 'updated')
+   }
+   /* fase de destruição */
+
+
+
+  })
+  app.component('user', {
+   template: '#user',
+
+   beforeUnmount() {
+    console.log('beforeUnmount')
+   },
+
+   unmounted(){
+     console.log('unmounted')
+   }
+
+  })
+  const app2 = app.mount('#app')
+  </script>
+ 
+</body>
+</html>
